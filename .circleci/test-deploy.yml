@@ -35,7 +35,7 @@ jobs:
     steps:
       - checkout
       - job-output-logger/gather_job_logs:
-          role_arn: $ROLE_ARN
+          role_arn: $role_arn
           region: $region
           to: s3://nick-s-job-logger-test
 workflows:
@@ -47,8 +47,7 @@ workflows:
           filters: *release-filters
       - command-test:
           filters: *release-filters
-          context:
-            - aws-s3-oidc
+          context: aws-s3-oidc
       # The orb must be re-packed for publishing, and saved to the workspace.
       - orb-tools/pack:
           filters: *release-filters
@@ -68,6 +67,7 @@ workflows:
           filters: *filters
       - command-test:
           filters: *filters
-          context:
-            - aws-s3-oidc
+          context: aws-s3-oidc
+          requires:
+            - dummy-job
 
