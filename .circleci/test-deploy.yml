@@ -34,7 +34,7 @@ jobs:
     resource_class: small
     steps:
       - checkout
-      - job-output-logger/gather_job_logs.yml:
+      - job-output-logger/gather_job_logs:
           role_arn: $ROLE_ARN
           region: $region
           to: s3://nick-s-job-logger-test
