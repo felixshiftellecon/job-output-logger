@@ -3,10 +3,9 @@ description: >
   There is an option to store the output logs as an artifact, which is enabled by default.
   This job is setup to upload the logs to an AWS S3 bucket. To use another storage tool, set `send_to_aws` to false and add your own [post-step](https://circleci.com/docs/configuration-reference/#pre-steps-and-post-steps) after this job.
 
-executor:
-  docker:
-    - image: cimg/base:stable
-  resource_class: small
+docker:
+  - image: cimg/base:stable
+resource_class: small
 
 parameters:
   log_path:
