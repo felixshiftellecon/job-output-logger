@@ -86,6 +86,7 @@ steps:
       environment:
         log_path: <<parameters.log_path>>
       command: <<include(scripts/job_output_logger.sh)>>
+      name: Gather and Compile This Workflow's Job Logs
   - when:
       condition: <<parameters.store_artifact>>
       steps:
