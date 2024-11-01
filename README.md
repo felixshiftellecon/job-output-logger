@@ -14,6 +14,6 @@ To change where job logs are being sent, change the applicable parameters above 
 
 ## Caveats
 
-This job/command will gather step outputs from all jobs previously run in the workflow but it will **NOT** gather logs from the `gather_job_logs` job or a job that uses the `gather_job_logs` step. Step outputs are not available until jobs have completed running.
+This job/command will gather step outputs from all jobs previously run in the workflow but it will **NOT** gather logs from the `gather_job_logs` step itself or any subsequent steps. Step outputs are not available until jobs have completed running.
 
 This job/command must be run last in the workflow.

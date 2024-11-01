@@ -70,7 +70,7 @@ parameters:
       -sse)
     type: string
   from:
-    default: "job_logs/"
+    default: "job_logs/."
     description: A local file or source s3 object
     type: string
   to:
