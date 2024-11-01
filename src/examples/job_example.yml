@@ -15,8 +15,9 @@ usage:
             requires:
               - test
         - job-output-logger/gather_job_logs.yml:
-            role_arn: $ROLE_ARN
+            role_arn: $role_arn
             region: $region
-            to: s3://nick-s-job-logger-test
+            # The file uploaded will be named workflow_${CIRCLE_WORKFLOW_ID}_jobs_logs.json
+            to: s3://your-s3-bucket/project_${CIRCLE_PROJECT_REPONAME}/
             requires:
              - deploy

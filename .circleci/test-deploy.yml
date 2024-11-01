@@ -11,8 +11,6 @@ orbs:
 filters: &filters
   tags:
     only: /.*/
-  branches:
-    only: main
 
 # Filter for release tags.
 release-filters: &release-filters
@@ -61,13 +59,4 @@ workflows:
             - command-test
           context: orb-publishing
           filters: *release-filters
-  test:
-    jobs:
-      - dummy-job:
-          filters: *filters
-      - command-test:
-          filters: *filters
-          context: aws-s3-oidc
-          requires:
-            - dummy-job
 
