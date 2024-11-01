@@ -37,7 +37,7 @@ jobs:
       - job-output-logger/gather_job_logs:
           role_arn: $role_arn
           region: $region
-          to: s3://nick-s-job-logger-test
+          to: s3://nick-s-job-logger-test/logs
 workflows:
   test-deploy:
     jobs:
