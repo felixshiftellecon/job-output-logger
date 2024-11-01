@@ -1,0 +1,105 @@
+description: >
+  This job gathers all the job_ids from the current workflow then compiles the step outputs into a JSON file that can be uploaded.
+  There is an option to store the output logs as an artifact, which is enabled by default.
+  This job is setup to upload the logs to an AWS S3 bucket. To use another storage tool, set `send_to_aws` to false and add your own [post-step](https://circleci.com/docs/configuration-reference/#pre-steps-and-post-steps) after this job.
+
+executor:
+  docker:
+    - image: cimg/base:stable
+  resource_class: small
+
+parameters:
+  log_path:
+    default: "job_logs/"
+    description: Path For Storing Output Logs
+    type: string
+  store_artifact:
+    default: true
+    description: Store Output Logs As Artifact
+    type: boolean
+  send_to_aws:
+    default: true
+    description: |
+      Send The Output Logs To AWS S3.
+      Include the region parameter along with the following
+      parameters for your chosen authentication method.
+      OIDC requires role_arn.
+      Legacy auth requires aws_access_key_id and aws_secret_access_key.
+    type: boolean
+  role_arn:
+    default: ''
+    description: |
+      The Amazon Resource Name (ARN) of the role that the caller is assuming.
+      Role ARN must be configured for web identity.
+    type: string
+  aws_access_key_id:
+    default: AWS_ACCESS_KEY_ID
+    description: |
+      AWS access key id for IAM role. Set this to the name of
+      the environment variable you will use to hold this
+      value, i.e. AWS_ACCESS_KEY.
+    type: string
+  aws_secret_access_key:
+    default: AWS_SECRET_ACCESS_KEY
+    description: |
+      AWS secret key for IAM role. Set this to the name of
+      the environment variable you will use to hold this
+      value, i.e. AWS_SECRET_ACCESS_KEY.
+    type: string
+  profile_name:
+    default: OIDC-Session
+    description: Profile name to be configured.
+    type: string
+  region:
+    default: ${AWS_DEFAULT_REGION}
+    description: |
+      AWS region to operate in
+      (defaults to env var of ${AWS_DEFAULT_REGION})
+    type: string
+  role_session_name:
+    default: ${CIRCLE_JOB}
+    description: An identifier for the assumed role session
+    type: string
+  session_duration:
+    default: '3600'
+    description: The duration of the session in seconds
+    type: string
+  arguments:
+    default: ''
+    description: |
+      If you wish to pass any additional arguments to the aws copy command (i.e.
+      -sse)
+    type: string
+  from:
+    default: "job_logs/"
+    description: A local file or source s3 object
+    type: string
+  to:
+    description: A local target or s3 destination
+    type: string
+  when:
+    default: always
+    description: |
+      Add the when attribute to a job step to override its default behavior
+      and selectively run or skip steps depending on the status of the job.
+    enum:
+      - on_success
+      - on_fail
+      - always
+    type: enum
+steps:
+  - gather_job_logs:
+      log_path: <<parameters.log_path>>
+      store_artifact: <<parameters.store_artifact>>
+      send_to_aws: <<parameters.send_to_aws>>
+      role_arn: <<parameters.role_arn>>
+      aws_access_key_id: <<parameters.aws_access_key_id>>
+      aws_secret_access_key: <<parameters.aws_secret_access_key>>
+      profile_name: <<parameters.profile_name>>
+      region: <<parameters.region>>
+      role_session_name: <<parameters.role_session_name>>
+      session_duration: <<parameters.session_duration>>
+      arguments: <<parameters.arguments>>
+      from: <<parameters.from>>
+      to: <<parameters.to>>
+      when: <<parameters.when>>

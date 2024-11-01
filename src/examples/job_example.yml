@@ -1,0 +1,22 @@
+description: >
+  Using the gather_job_logs job to send job logs to AWS S3
+usage:
+  version: 2.1
+  orbs:
+    job-output-logger: felixshiftellecon/job-output-logger@1.0.0
+  workflows:
+    build-test-deploy:
+      jobs:
+        - build
+        - test:
+            requires:
+              - build
+        - deploy:
+            requires:
+              - test
+        - job-output-logger/gather_job_logs.yml:
+            role_arn: $ROLE_ARN
+            region: $region
+            to: s3://nick-s-job-logger-test
+            requires:
+             - deploy

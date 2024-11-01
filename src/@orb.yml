@@ -12,4 +12,6 @@ display:
 
 # If your orb requires other orbs, you can import them like this. Otherwise remove the "orbs" stanza.
 # orbs:
-#  hello: circleci/hello-build@0.0.5
+  aws-cli: circleci/aws-cli@5.1.1
+  aws-s3: circleci/aws-s3@4.1.0
+
