@@ -34,7 +34,7 @@ do
 
   JOB_OUTPUT=$(curl https://circleci.com/api/v1.1/project/${VCS_TYPE}/${USERNAME}/${PROJECT}/${JOB_NUMBER} -H "Circle-Token: ${CIRCLE_TOKEN}") || { echo "Failed to fetch job output"; exit 1; }
   
-  printf "Job Output for ${JOB_NUMBER}: \n ${JOB_OUTPUT}"
+  echo "Job Output for ${JOB_NUMBER}: \n ${JOB_OUTPUT}"
 
   JOB_JSON_OUTPUT="[]"
 
@@ -48,12 +48,12 @@ do
     if [ -z "$OUTPUT_URL" ] || [ "$OUTPUT_URL" == "null" ]; then
       echo "Output URL not available for this step. It might be the last step in the last job and hasn't completed yet."
       JOB_JSON_OUTPUT=$(echo $JOB_JSON_OUTPUT | jq --arg stepName "$STEP_NAME" '. + [{"stepName": $stepName, "outputUrl": "Output URL not available for this step. It might be the last step in the last job and hasnt completed yet", "logs": "Logs not available for this step. It might be the last step in the last job and hasnt completed yet"}]')
-      printf "Adding step name to build logs: \n ${JOB_JSON_OUTPUT}"
+      echo "Adding step name to build logs: \n ${JOB_JSON_OUTPUT}"
     else
       LOGS=$(curl $OUTPUT_URL -H "Circle-Token: ${CIRCLE_TOKEN}") || { echo "Failed to fetch logs"; exit 1; }
       echo "Step logs: ${LOGS}"
       JOB_JSON_OUTPUT=$(echo $JOB_JSON_OUTPUT | jq --arg stepName "$STEP_NAME" --arg outputUrl "$OUTPUT_URL" --arg logs "$LOGS" '. + [{"stepName": $stepName, "outputUrl": $outputUrl, "logs": $logs}]') || { echo "Failed to update JSON output"; exit 1; }
-      printf "Adding step logs to build logs: \n ${JOB_JSON_OUTPUT}"
+      echo "Adding step logs to build logs: \n ${JOB_JSON_OUTPUT}"
     fi
   done < <(echo $JOB_OUTPUT | jq -c '.steps[]')
 

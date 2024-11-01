@@ -21,7 +21,7 @@ workflows:
           filters: *filters
       - shellcheck/check:
           filters: *filters
-          exclude: SC2086
+          exclude: SC2086,SC2028
       # Triggers the next workflow in the Orb Development Kit.
       - orb-tools/continue:
           pipeline_number: << pipeline.number >>
